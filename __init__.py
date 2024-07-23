@@ -2,16 +2,25 @@ from langchain.prompts import ChatPromptTemplate
 from langchain.schema.output_parser import StrOutputParser
 from langchain_openai import ChatOpenAI
 import os
+import streamlit as st
 from dotenv import load_dotenv
 
+# Access the API key from Streamlit secrets
+try:
+    openapi_key = st.secrets["openapi_key"]
+    if openapi_key:
+        print('Got key')
 
+except KeyError:
+    st.error("The OpenAI API key is not set. Please add your OpenAI API key to the Streamlit secrets.")
+    st.stop(openapi_key)
 
 # Define prompt templates
 prompt1 = ChatPromptTemplate.from_template("What are the risks associated with a research project titled '{title}' that {participant_clause}? Please return just one risk assessment.")
 prompt2 = ChatPromptTemplate.from_template("What would be a good study design for a research project titled '{title}' that {participant_clause} with participants who are {age_clause}? The research methods are: {research_methods}")
 
 # Create a ChatOpenAI model
-model = ChatOpenAI(model="gpt-4")
+model = ChatOpenAI(api_key=openapi_key,model="gpt-4")
 
 # Create chains
 chain1 = prompt1 | model | StrOutputParser()
