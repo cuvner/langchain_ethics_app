@@ -5,11 +5,6 @@ import os
 from dotenv import load_dotenv
 
 
-# Load environment variables from .env file
-load_dotenv()
-
-# Now you can access the OPENAI_API_KEY environment variable
-openapi_key = os.getenv("OPENAI_API_KEY")
 
 # Define prompt templates
 prompt1 = ChatPromptTemplate.from_template("What are the risks associated with a research project titled '{title}' that {participant_clause}? Please return just one risk assessment.")

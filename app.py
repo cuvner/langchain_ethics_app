@@ -1,6 +1,5 @@
 import streamlit as st
 from dotenv import load_dotenv
-import os
 import __init__  # Assuming you have the function ethics_application_function in a module named langchain_helper
 
 # Access the API key from Streamlit secrets
@@ -8,8 +7,6 @@ try:
     openapi_key = st.secrets["openapi_key"]
     if openapi_key:
         print('Got key')
-
-    
 
 except KeyError:
     st.error("The OpenAI API key is not set. Please add your OpenAI API key to the Streamlit secrets.")
