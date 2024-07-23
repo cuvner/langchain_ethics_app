@@ -3,8 +3,8 @@ from dotenv import load_dotenv
 import os
 import __init__  # Assuming you have the function ethics_application_function in a module named langchain_helper
 
-# Load environment variables from .env file
-load_dotenv()
+# Access the API key from Streamlit secrets
+openapi_key = st.secrets["OPENAI_API_KEY"]
 
 st.title('Ethics Application Generator')
 
