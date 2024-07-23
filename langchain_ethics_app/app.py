@@ -6,7 +6,7 @@ import __init__  # Assuming you have the function ethics_application_function in
 # Access the API key from Streamlit secrets
 try:
     openapi_key = st.secrets["my_api_key"]
-    print()
+    print( openapi_key)
 
 except KeyError:
     st.error("The OpenAI API key is not set. Please add your OpenAI API key to the Streamlit secrets.")
