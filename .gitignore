@@ -104,6 +104,9 @@ ENV/
 env.bak/
 venv.bak/
 
+#web app
+.streamlit
+
 # Spyder project settings
 .spyderproject
 .spyproject
