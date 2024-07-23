@@ -4,7 +4,20 @@ import os
 import __init__  # Assuming you have the function ethics_application_function in a module named langchain_helper
 
 # Access the API key from Streamlit secrets
-st.secrets["OPENAI_API_KEY"]
+try:
+    openapi_key = st.secrets["OPENAI_API_KEY"]
+except KeyError:
+    st.error("The OpenAI API key is not set. Please add your OpenAI API key to the Streamlit secrets.")
+    st.stop()
+
+# Check if the environment variable is set and matches the Streamlit secret
+env_key_set = os.getenv("OPENAI_API_KEY") == st.secrets["OPENAI_API_KEY"]
+
+# Write the result to the Streamlit app
+st.write(
+    "Has environment variables been set:",
+    env_key_set,
+)
 
 st.title('Ethics Application Generator')
 
