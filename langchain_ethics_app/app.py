@@ -4,7 +4,7 @@ import os
 import __init__  # Assuming you have the function ethics_application_function in a module named langchain_helper
 
 # Access the API key from Streamlit secrets
-openapi_key = st.secrets["OPENAI_API_KEY"]
+st.secrets["OpenAI_key"] == "your OpenAI key"
 
 st.title('Ethics Application Generator')
 
