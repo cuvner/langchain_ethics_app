@@ -14,14 +14,14 @@ def run_app():
     title, uses_participants, participants_over_18, research_methods = display_form()
 
     if st.button("Generate Ethics Application"):
-        if title and research_methods:
+        if title and all(research_methods):
             uses_participants_bool = True if uses_participants == "Yes" else False
             participants_over_18_bool = True if participants_over_18 == "Yes" else False
 
             try:
                 with st.spinner('Generating ethical review...'):
-                    response = ethics_application_function(title, uses_participants_bool, participants_over_18_bool, research_methods, openapi_key)
-                    risk_level = assess_risk_level(research_methods, participants_over_18_bool)
+                    response = ethics_application_function(title, uses_participants_bool, participants_over_18_bool, "\n".join(research_methods), openapi_key)
+                    risk_level = assess_risk_level("\n".join(research_methods), participants_over_18_bool)
 
                 st.success('Ethical review generated successfully!')
 
