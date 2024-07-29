@@ -1,5 +1,5 @@
-from src.main import main
+import streamlit as st
+from src.main import run_app
 
-if __name__ == "__main__":
-    main()
-
+# Run the main app function from the src/main.py module
+run_app()
