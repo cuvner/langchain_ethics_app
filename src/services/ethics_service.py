@@ -5,7 +5,7 @@ from langchain_openai import ChatOpenAI
 # Define prompt templates
 prompt1 = ChatPromptTemplate.from_template("What are the ethical issues associated with a research project titled '{title}' that {participant_clause}? Please return just one risk assessment.")
 prompt2 = ChatPromptTemplate.from_template("What are the ethical issues related to the following research methods involving {age_clause}: {research_methods}? Please focus on ethical issues and how to address them.")
-prompt3 = ChatPromptTemplate.from_template("Based on the following research methods involving {age_clause}, assess the risk level of the research project titled '{title}'. The methods are: {research_methods}. Please categorize the risk level as Low, Medium, or High and provide a brief explanation.")
+prompt3 = ChatPromptTemplate.from_template("Based on the following research methods involving {age_clause}, assess the risk level of the research project titled '{title}'. The methods are: {research_methods}. Please categorize the risk level as: Low, Medium, or High and provide a brief explanation.")
 
 # Function to invoke the chain
 def ethics_application_function(title, uses_participants, participants_over_18, research_methods, openapi_key):

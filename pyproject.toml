@@ -4,6 +4,7 @@ version = "0.1.0"
 description = ""
 authors = ["cuvner <chriscourage699@hotmail.com>"]
 readme = "README.md"
+package-mode = false
 
 [tool.poetry.dependencies]
 python = "^3.12"
@@ -12,6 +13,7 @@ langchain = "^0.2.10"
 openai = "^1.37.0"
 langchain-openai = "^0.1.17"
 streamlit = "^1.36.0"
+streamlit-navigation-bar = "^3.3.0"
 
 
 [build-system]
