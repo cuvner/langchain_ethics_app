@@ -5,6 +5,7 @@ from langchain_openai import ChatOpenAI
 # Define prompt templates
 prompt1 = ChatPromptTemplate.from_template("What are the ethical issues associated with a research project titled '{title}' that {participant_clause}? Please return just one risk assessment.")
 prompt2 = ChatPromptTemplate.from_template("What are the ethical issues related to the following research methods involving {age_clause}: {research_methods}? Please focus on ethical issues and how to address them.")
+prompt3 = ChatPromptTemplate.from_template("Based on the following research methods involving {age_clause}, assess the risk level of the research project titled '{title}'. The methods are: {research_methods}. Please categorize the risk level as Low, Medium, or High and provide a brief explanation.")
 
 # Function to invoke the chain
 def ethics_application_function(title, uses_participants, participants_over_18, research_methods, openapi_key):
@@ -27,6 +28,7 @@ def ethics_application_function(title, uses_participants, participants_over_18, 
         # Create chains
         chain1 = prompt1 | model | StrOutputParser()
         chain2 = prompt2 | model | StrOutputParser()
+        chain3 = prompt3 | model | StrOutputParser()
         
         # Get risk assessment
         risk_response = chain1.invoke({"title": title, "participant_clause": participant_clause})
@@ -41,21 +43,16 @@ def ethics_application_function(title, uses_participants, participants_over_18, 
         })
         study_design = study_design_response.strip()
 
-        return {"risk": risk, "study_design": study_design}
+        # Assess risk level
+        risk_level_response = chain3.invoke({
+            "title": title,
+            "participant_clause": participant_clause,
+            "age_clause": age_clause,
+            "research_methods": research_methods
+        })
+        risk_level = risk_level_response.strip()
+
+        return {"risk": risk, "study_design": study_design, "risk_level": risk_level}
     
     except Exception as e:
         raise RuntimeError(f"Error generating ethics application: {e}")
-
-# Function to assess risk level
-def assess_risk_level(research_methods, participants_over_18):
-    # Define criteria for risk levels
-    low_risk_methods = ["surveys", "questionnaires"]
-    medium_risk_methods = ["interviews", "focus groups"]
-    high_risk_methods = ["experiments", "interventions"]
-
-    if any(method in research_methods for method in high_risk_methods):
-        return "High"
-    elif any(method in research_methods for method in medium_risk_methods):
-        return "Medium"
-    else:
-        return "Low"
