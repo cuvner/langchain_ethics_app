@@ -1,15 +1,12 @@
 import streamlit as st
 from src.components.form import display_form
 from src.services.ethics_service import ethics_application_function, assess_risk_level
+from src.config import get_openai_api_key
 import pandas as pd
 
 def run_app():
-    # Access the API key from Streamlit secrets
-    try:
-        openapi_key = st.secrets["OPENAI_API_KEY"]
-    except KeyError:
-        st.error("The OpenAI API key is not set. Please add your OpenAI API key to the Streamlit secrets.")
-        st.stop()
+    # Get the API key from the config file
+    openapi_key = get_openai_api_key()
 
     st.title('Ethics Application Generator')
 
