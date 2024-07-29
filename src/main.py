@@ -19,8 +19,11 @@ def run_app():
             participants_over_18_bool = True if participants_over_18 == "Yes" else False
 
             try:
-                response = ethics_application_function(title, uses_participants_bool, participants_over_18_bool, research_methods, openapi_key)
-                risk_level = assess_risk_level(research_methods, participants_over_18_bool)
+                with st.spinner('Generating ethical review...'):
+                    response = ethics_application_function(title, uses_participants_bool, participants_over_18_bool, research_methods, openapi_key)
+                    risk_level = assess_risk_level(research_methods, participants_over_18_bool)
+
+                st.success('Ethical review generated successfully!')
 
                 st.header("Risk Assessment")
                 st.write(response['risk'])
@@ -28,8 +31,19 @@ def run_app():
                 st.header("Study Design")
                 st.write(response['study_design'])
 
+                # Determine the color and message based on the risk level
+                if risk_level == "High":
+                    color = "red"
+                    message = "<b style='color:red;'>High</b> - Please seek advice from your tutor."
+                elif risk_level == "Medium":
+                    color = "orange"
+                    message = "<b style='color:orange;'>Medium</b>"
+                else:
+                    color = "green"
+                    message = "<b style='color:green;'>Low</b>"
+
                 st.header("Risk Level")
-                st.write(f"The risk level of this study is: {risk_level}")
+                st.markdown(f"The risk level of this study is: {message}", unsafe_allow_html=True)
 
                 # Save the result for later review
                 if 'submissions' not in st.session_state:
