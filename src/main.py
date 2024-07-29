@@ -1,6 +1,6 @@
 import streamlit as st
 from src.components.form import display_form
-from src.services.ethics_service import ethics_application_function, assess_risk_level
+from src.services.ethics_service import ethics_application_function
 from src.config import get_openai_api_key
 import pandas as pd
 
@@ -21,7 +21,7 @@ def run_app():
             try:
                 with st.spinner('Generating ethical review...'):
                     response = ethics_application_function(title, uses_participants_bool, participants_over_18_bool, "\n".join(research_methods), openapi_key)
-                    risk_level = assess_risk_level("\n".join(research_methods), participants_over_18_bool)
+                    risk_level, risk_explanation = response['risk_level'].split(": ")
 
                 st.success('Ethical review generated successfully!')
 
@@ -32,18 +32,15 @@ def run_app():
                 st.write(response['study_design'])
 
                 # Determine the color and message based on the risk level
-                if risk_level == "High":
+                if "High" in risk_level:
                     color = "red"
-                    message = "<b style='color:red;'>High</b> - Please seek advice from your tutor."
-                elif risk_level == "Medium":
+                    message = f"<b style='color:red; font-size:24px;'>High</b> - {risk_explanation}. Please seek advice from your tutor."
+                elif "Medium" in risk_level:
                     color = "orange"
-                    message = "<b style='color:orange;'>Medium</b>"
+                    message = f"<b style='color:orange; font-size:24px;'>Medium</b> - {risk_explanation}"
                 else:
                     color = "green"
-                    message = "<b style='color:green;'>Low</b>"
-
-                st.header("Risk Level")
-                st.markdown(f"The risk level of this study is: {message}", unsafe_allow_html=True)
+                    message = f"<b style='color:green; font-size:24px;'>Low</b> - {risk_explanation}"
 
                 # Save the result for later review
                 if 'submissions' not in st.session_state:
@@ -55,20 +52,23 @@ def run_app():
                     "risk_level": risk_level
                 })
 
+                # Add a button to download the submissions as a spreadsheet
+                if st.button("Download Submissions as Spreadsheet"):
+                    if 'submissions' in st.session_state:
+                        df = pd.DataFrame(st.session_state['submissions'])
+                        st.download_button(
+                            label="Download submissions as CSV",
+                            data=df.to_csv(index=False),
+                            file_name='submissions.csv',
+                            mime='text/csv',
+                        )
+                    else:
+                        st.error("No submissions available to download.")
+
+                # Display the risk level at the bottom of the page
+                st.markdown(f"<div style='position:fixed; bottom:10px; width:100%; text-align:center;'>{message}</div>", unsafe_allow_html=True)
+
             except Exception as e:
                 st.error(f"An error occurred: {e}")
         else:
             st.error("Please enter a research title and describe the research methods.")
-
-    # Add a button to download the submissions as a spreadsheet
-    if st.button("Download Submissions as Spreadsheet"):
-        if 'submissions' in st.session_state:
-            df = pd.DataFrame(st.session_state['submissions'])
-            st.download_button(
-                label="Download submissions as CSV",
-                data=df.to_csv(index=False),
-                file_name='submissions.csv',
-                mime='text/csv',
-            )
-        else:
-            st.error("No submissions available to download.")
