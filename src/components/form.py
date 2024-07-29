@@ -11,7 +11,28 @@ def display_form():
     else:
         st.radio("Are participants over 18?", ("N/A"), disabled=True)
     
-    research_methods = st.text_area("Describe the research methods", 
-                                    help="Please list the research methods you will use and who they will involve. "
-                                         "For example, 'interviews with under 18s', 'surveys with elderly people', etc.")
-    return title, uses_participants, participants_over_18, research_methods
+    # Manage dynamic input fields for research methods
+    if 'research_methods' not in st.session_state:
+        st.session_state['research_methods'] = ['']
+
+    def add_method():
+        st.session_state.research_methods.append('')
+
+    def remove_method(index):
+        st.session_state.research_methods.pop(index)
+
+    st.write("Describe the research methods")
+    for i, method in enumerate(st.session_state.research_methods):
+        col1, col2 = st.columns([4, 1])
+        with col1:
+            st.session_state.research_methods[i] = st.text_area(f"Method {i+1}", value=method, key=f"method_{i}")
+        with col2:
+            if st.button("Remove", key=f"remove_{i}"):
+                remove_method(i)
+                st.experimental_rerun()
+
+    if st.button("Add Method"):
+        add_method()
+        st.experimental_rerun()
+    
+    return title, uses_participants, participants_over_18, st.session_state.research_methods
