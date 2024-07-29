@@ -36,7 +36,7 @@ def display_form():
         with col2:
             if st.button("Remove", key=f"remove_{i}"):
                 remove_method(i)
-                st.st.rerun()
+                st.rerun()
 
     if st.button("Add Method"):
         add_method()
