@@ -1,14 +1,10 @@
 from langchain.prompts import ChatPromptTemplate
 from langchain.schema.output_parser import StrOutputParser
 from langchain_openai import ChatOpenAI
-import streamlit as st
+from src.config import get_openai_api_key
 
-# Access the API key from Streamlit secrets
-try:
-    openapi_key = st.secrets["openapi_key"]
-except KeyError:
-    st.error("The OpenAI API key is not set. Please add your OpenAI API key to the Streamlit secrets.")
-    st.stop()
+# Access the API key
+openapi_key = get_openai_api_key()
 
 # Define prompt templates
 prompt1 = ChatPromptTemplate.from_template("What are the risks associated with a research project titled '{title}' that {participant_clause}? Please return just one risk assessment.")
@@ -48,4 +44,3 @@ def ethics_application_function(title, uses_participants, participants_over_18, 
     study_design = study_design_response.strip()
 
     return {"risk": risk, "study_design": study_design}
-
