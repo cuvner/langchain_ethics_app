@@ -64,31 +64,32 @@ def run_app():
                             risk_level = "Unknown"
                             risk_explanation = "The risk level could not be determined."
 
+                        # Store the response in the session state
+                        st.session_state['response'] = {
+                            "risk": response['risk'],
+                            "study_design": response['study_design'],
+                            "risk_level": risk_level,
+                            "risk_explanation": risk_explanation
+                        }
+
                     st.success('Ethical review generated successfully!')
-
-                    st.header("Risk Assessment")
-                    st.write(response['risk'])
-
-                    st.header("Study Design")
-                    st.write(response['study_design'])
-
-                    # Save the result for later review
-                    if 'submissions' not in st.session_state:
-                        st.session_state['submissions'] = []
-                    st.session_state['submissions'].append({
-                        "title": title,
-                        "risk": response['risk'],
-                        "study_design": response['study_design'],
-                        "risk_level": risk_level
-                    })
-
-                    # Display the fixed bottom bar
-                    display_fixed_bottom_bar(risk_level, risk_explanation)
 
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
             else:
                 st.error("Please enter a research title and describe the research methods.")
+
+        # Display the stored response if available
+        if 'response' in st.session_state:
+            response = st.session_state['response']
+            st.header("Risk Assessment")
+            st.write(response['risk'])
+
+            st.header("Study Design")
+            st.write(response['study_design'])
+
+            # Display the fixed bottom bar
+            display_fixed_bottom_bar(response['risk_level'], response['risk_explanation'])
 
         st.markdown('</div>', unsafe_allow_html=True)
 
