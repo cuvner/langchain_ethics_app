@@ -36,11 +36,11 @@ def display_form():
         with col2:
             if st.button("Remove", key=f"remove_{i}"):
                 remove_method(i)
-                st.experimental_rerun()
+                st.st.rerun()
 
     if st.button("Add Method"):
         add_method()
-        st.experimental_rerun()
+        st.rerun()
     
     st.session_state['title'] = title
     st.session_state['uses_participants'] = uses_participants
