@@ -21,7 +21,9 @@ def run_app():
             try:
                 with st.spinner('Generating ethical review...'):
                     response = ethics_application_function(title, uses_participants_bool, participants_over_18_bool, "\n".join(research_methods), openapi_key)
-                    risk_level, risk_explanation = response['risk_level'].split(": ")
+                    risk_level_info = response['risk_level'].split(": ", 1)
+                    risk_level = risk_level_info[0]
+                    risk_explanation = risk_level_info[1] if len(risk_level_info) > 1 else ""
 
                 st.success('Ethical review generated successfully!')
 
