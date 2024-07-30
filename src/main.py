@@ -64,6 +64,9 @@ def run_app():
                             risk_level = "Unknown"
                             risk_explanation = "The risk level could not be determined."
 
+                        # Split study design into ethical considerations
+                        ethical_considerations = response['study_design'].split("\n\n")  # Assuming each ethical consideration is separated by two new lines
+
                         # Store the response in the session state
                         st.session_state['response'] = {
                             "risk": response['risk'],
@@ -71,7 +74,7 @@ def run_app():
                             "risk_level": risk_level,
                             "risk_explanation": risk_explanation,
                             "research_methods": research_methods,
-                            "ethical_considerations": response['study_design'].split("\n\n")  # Assuming each ethical consideration is separated by two new lines
+                            "ethical_considerations": ethical_considerations
                         }
 
                         # Save the result for later review
@@ -83,7 +86,7 @@ def run_app():
                             "study_design": response['study_design'],
                             "risk_level": risk_level,
                             "research_methods": research_methods,
-                            "ethical_considerations": response['study_design'].split("\n\n")  # Assuming each ethical consideration is separated by two new lines
+                            "ethical_considerations": ethical_considerations
                         })
 
                     st.success('Ethical review generated successfully!')
