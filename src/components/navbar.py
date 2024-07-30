@@ -1,6 +1,6 @@
 import streamlit as st
 from streamlit_navigation_bar import st_navbar
-import pandas as pd
+from src.services.ethical_considerations import create_detailed_dataframe
 
 def display_navbar():
     # Define the pages and styles for the navigation bar
@@ -32,7 +32,7 @@ def display_navbar():
     # Handle the "Download Submissions" page
     if page == "Download Submissions":
         if 'submissions' in st.session_state and st.session_state['submissions']:
-            df = pd.DataFrame(st.session_state['submissions'])
+            df = create_detailed_dataframe(st.session_state['submissions'])
             csv = df.to_csv(index=False)
             st.download_button(
                 label="Download submissions as CSV",

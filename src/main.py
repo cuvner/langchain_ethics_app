@@ -69,7 +69,9 @@ def run_app():
                             "risk": response['risk'],
                             "study_design": response['study_design'],
                             "risk_level": risk_level,
-                            "risk_explanation": risk_explanation
+                            "risk_explanation": risk_explanation,
+                            "research_methods": research_methods,
+                            "ethical_considerations": response['study_design'].split("\n\n")  # Assuming each ethical consideration is separated by two new lines
                         }
 
                         # Save the result for later review
@@ -79,7 +81,9 @@ def run_app():
                             "title": title,
                             "risk": response['risk'],
                             "study_design": response['study_design'],
-                            "risk_level": risk_level
+                            "risk_level": risk_level,
+                            "research_methods": research_methods,
+                            "ethical_considerations": response['study_design'].split("\n\n")  # Assuming each ethical consideration is separated by two new lines
                         })
 
                     st.success('Ethical review generated successfully!')
