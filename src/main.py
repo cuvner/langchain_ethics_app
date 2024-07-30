@@ -72,6 +72,16 @@ def run_app():
                             "risk_explanation": risk_explanation
                         }
 
+                        # Save the result for later review
+                        if 'submissions' not in st.session_state:
+                            st.session_state['submissions'] = []
+                        st.session_state['submissions'].append({
+                            "title": title,
+                            "risk": response['risk'],
+                            "study_design": response['study_design'],
+                            "risk_level": risk_level
+                        })
+
                     st.success('Ethical review generated successfully!')
 
                 except Exception as e:
