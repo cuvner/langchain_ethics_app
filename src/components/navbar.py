@@ -4,7 +4,7 @@ from src.services.ethical_considerations import create_detailed_dataframe
 
 def display_navbar():
     # Define the pages and styles for the navigation bar
-    pages = ["Home", "Form", "Download Submissions"]
+    pages = ["Home", "Form", "Research Study Design", "Download Submissions"]
     styles = {
         "nav": {
             "background-color": "rgb(123, 209, 146)",
