@@ -5,8 +5,8 @@ from langchain_openai import ChatOpenAI
 from src.config import get_openai_api_key
 
 # Define prompt templates
-prompt1 = ChatPromptTemplate.from_template("What are the risks associated with a research project titled '{title}' that {participant_clause}? Please return just one risk assessment.")
-prompt2 = ChatPromptTemplate.from_template("What would be a good study design for a research project titled '{title}' that {participant_clause} with participants who are {age_clause}? The research methods are: {research_methods}")
+prompt1 = ChatPromptTemplate.from_template("Based on the description '{description}', what are the potential risks associated with this research project that {participant_clause}? Please return just one risk assessment.")
+prompt2 = ChatPromptTemplate.from_template("Given the description '{description}' and the methods: {research_methods}, what would be an effective study design for a research project that {participant_clause} with participants who are {age_clause}? Please include considerations for how to implement these methods effectively and ethically.")
 
 def load_methods(file_path='src/methods.txt'):
     with open(file_path, 'r') as file:
@@ -72,12 +72,12 @@ def design_methods_page():
                     chain2 = prompt2 | model | StrOutputParser()
 
                     # Get risk assessment
-                    risk_response = chain1.invoke({"title": description, "participant_clause": participant_clause})
+                    risk_response = chain1.invoke({"description": description, "participant_clause": participant_clause})
                     risk = risk_response.strip()
 
                     # Generate study design
                     study_design_response = chain2.invoke({
-                        "title": description,
+                        "description": description,
                         "participant_clause": participant_clause,
                         "age_clause": age_clause,
                         "research_methods": research_methods
