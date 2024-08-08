@@ -4,6 +4,7 @@ from src.components.fixed_bottom_bar import display_fixed_bottom_bar
 from src.components.navbar import display_navbar
 from src.services.ethics_service import ethics_application_function
 from src.config import get_openai_api_key
+from src.components.design_methods import design_methods_page
 import pandas as pd
 
 def run_app():
@@ -15,11 +16,11 @@ def run_app():
 
     # Adjust the main content based on the navigation
     if page == "Home":
-        st.title('Welcome to the Ethics Application Generator')
-        st.write("Navigate to the Form page to submit your ethics application.")
+        st.title('Welcome to the Research Study Design Tool')
+        st.write("Navigate to the Form page to submit your study design.")
 
     elif page == "Form":
-        st.title('Ethics Application Generator')
+        st.title('Research Study Design')
 
         # Center the main content
         st.markdown(
@@ -44,13 +45,13 @@ def run_app():
         # Display the form and get the user inputs
         title, uses_participants, participants_over_18, research_methods = display_form()
 
-        if st.button("Generate Ethics Application"):
+        if st.button("Generate Study Design"):
             if title and all(research_methods):
                 uses_participants_bool = True if uses_participants == "Yes" else False
                 participants_over_18_bool = True if participants_over_18 == "Yes" else False
 
                 try:
-                    with st.spinner('Generating ethical review...'):
+                    with st.spinner('Generating study design...'):
                         response = ethics_application_function(title, uses_participants_bool, participants_over_18_bool, "\n".join(research_methods), openapi_key)
 
                         # Extracting the risk level and explanation correctly
@@ -89,7 +90,7 @@ def run_app():
                             "ethical_considerations": ethical_considerations
                         })
 
-                    st.success('Ethical review generated successfully!')
+                    st.success('Study design generated successfully!')
 
                 except Exception as e:
                     st.error(f"An error occurred: {e}")
@@ -110,5 +111,12 @@ def run_app():
 
         st.markdown('</div>', unsafe_allow_html=True)
 
+    elif page == "Research Study Design":
+        design_methods_page()
+
     # Add a spacer at the bottom for the fixed bar
     st.markdown('<div style="height: 100px;"></div>', unsafe_allow_html=True)
+
+# Run the app
+if __name__ == "__main__":
+    run_app()
