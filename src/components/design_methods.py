@@ -24,9 +24,9 @@ def design_methods_page():
     This page helps you design your research methods. Follow the steps below to get started:
     """)
 
-    # Step 1: Define Your Research Questions
-    st.header("Step 1: Define Your Research Questions")
-    title = st.text_input("Enter your main research question")
+    # Step 1: Description of the Study and Research Questions
+    st.header("Step 1: Description of the Study and Research Questions")
+    description = st.text_area("Enter the description of your study and the research questions", height=200)
 
     # Step 2: Select Your Research Methods
     st.header("Step 2: Select Your Research Methods")
@@ -54,8 +54,8 @@ def design_methods_page():
     # Step 4: Generate Study Design
     st.header("Step 4: Generate Study Design")
     if st.button("Generate Study Design"):
-        if not title or not selected_methods:
-            st.error("Please enter a research title and select at least one method.")
+        if not description or not selected_methods:
+            st.error("Please enter a study description and select at least one method.")
         else:
             openapi_key = get_openai_api_key()
             try:
@@ -72,12 +72,12 @@ def design_methods_page():
                     chain2 = prompt2 | model | StrOutputParser()
 
                     # Get risk assessment
-                    risk_response = chain1.invoke({"title": title, "participant_clause": participant_clause})
+                    risk_response = chain1.invoke({"title": description, "participant_clause": participant_clause})
                     risk = risk_response.strip()
 
                     # Generate study design
                     study_design_response = chain2.invoke({
-                        "title": title,
+                        "title": description,
                         "participant_clause": participant_clause,
                         "age_clause": age_clause,
                         "research_methods": research_methods
