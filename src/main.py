@@ -6,6 +6,16 @@ from src.services.ethics_service import ethics_application_function
 from src.config import get_openai_api_key
 from src.components.design_methods import design_methods_page
 import pandas as pd
+import os
+
+# Function to read the content of homepage.txt
+def load_homepage_text():
+    try:
+        with open('forms/homepage.txt', 'r') as file:
+            content = file.read()
+        return content
+    except FileNotFoundError:
+        return "Welcome to the Research Study Design Tool. The homepage content file could not be found."
 
 def run_app():
     # Get the API key from the config file
@@ -16,11 +26,14 @@ def run_app():
 
     # Adjust the main content based on the navigation
     if page == "Home":
-        st.title('Welcome to the Research Study Design Tool')
-        st.write("Navigate to the Form page to submit your study design.")
+        st.title('Ethics Application Tool')
 
-    elif page == "Form":
-        st.title('Research Study Design')
+        # Load and display the homepage text
+        homepage_text = load_homepage_text()
+        st.write(homepage_text)
+
+    elif page == "Ethics":
+        st.title('Explore ethics issues and solutions')
 
         # Center the main content
         st.markdown(
@@ -111,7 +124,7 @@ def run_app():
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    elif page == "Research Study Design":
+    elif page == "Research methods":
         design_methods_page()
 
     # Add a spacer at the bottom for the fixed bar
