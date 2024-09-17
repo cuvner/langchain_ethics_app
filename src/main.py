@@ -7,16 +7,32 @@ from src.config import get_openai_api_key
 from src.components.design_methods import design_methods_page
 import pandas as pd
 import os
+import logging
 
-# Function to read the content of homepage.txt
+# Function to read the content of homepage.txt using current working directory
 def load_homepage_text():
     try:
-        with open('/langchain_ethics_app/forms/homepage.txt', 'r') as file:
+        # Navigate up one directory level from the current script
+        base_path = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))  # Go up one level
+        logging.debug(f"Project root directory: {base_path}")
+        
+        # Construct the file path relative to the project root
+        file_path = os.path.join(base_path, 'forms', 'homepage.txt')
+        logging.debug(f"Trying to open file: {file_path}")
+        
+        # Try to open the file
+        with open(file_path, 'r') as file:
             content = file.read()
+            logging.info(f"File Content: {content}")  # Log file content
+            logging.info("File loaded successfully.")  # Confirm the file was loaded
         return content
     except FileNotFoundError:
-        return "This AI tool can be used to search the internet for useful advice on choosing appropriate research methods and gauging the ethical implications of these"
-
+        logging.error(f"Error: homepage.txt file not found at: {file_path}")
+        return "This AI tool can be used to search the internet for useful advice on choosing appropriate research methods and gauging the ethical implications of these."
+    except Exception as e:
+        logging.exception(f"An error occurred while loading the file: {e}")
+        return ""
+    
 def run_app():
     # Get the API key from the config file
     openapi_key = get_openai_api_key()
@@ -30,7 +46,7 @@ def run_app():
 
         # Load and display the homepage text
         homepage_text = load_homepage_text()
-        st.write(homepage_text)
+        st.markdown(homepage_text)  # Use st.markdown to preserve line breaks and formatting
 
     elif page == "Ethics":
         st.title('Explore ethics issues and solutions')
