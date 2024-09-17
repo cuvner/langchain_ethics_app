@@ -4,91 +4,72 @@ from langchain.schema.output_parser import StrOutputParser
 from langchain_openai import ChatOpenAI
 from src.config import get_openai_api_key
 
-# Define prompt templates
-prompt1 = ChatPromptTemplate.from_template("Based on the description '{description}', what are the potential risks associated with this research project that {participant_clause}? Please return just one risk assessment.")
-prompt2 = ChatPromptTemplate.from_template("Given the description '{description}' and the methods: {research_methods}, what would be an effective study design for a research project that {participant_clause} with participants who are {age_clause}? Please include considerations for how to implement these methods effectively and ethically.")
-
-def load_methods(file_path='src/methods.txt'):
-    with open(file_path, 'r') as file:
-        methods = [line.strip() for line in file if line.strip()]
-    return methods
-
-def save_new_method(method, file_path='src/methods.txt'):
-    with open(file_path, 'a') as file:
-        file.write(f"\n{method}")
+# Define the prompt template for generating research methods
+prompt1 = ChatPromptTemplate.from_template("Based on the research project titled '{title}' and the following research questions: '{description}', what are the most appropriate research methods that should be considered for this study? Please provide a concise list of methods.")
 
 def design_methods_page():
-    st.title('Generate appropriate research methods')
+    st.title('Develop Your Research Methods')
+
+    # Use unique keys for this page to avoid conflicts with other pages like the ethics page
+    if 'research_title' not in st.session_state:
+        st.session_state.research_title = ""
+    if 'research_description' not in st.session_state:
+        st.session_state.research_description = ""
+    if 'advised_methods' not in st.session_state:
+        st.session_state.advised_methods = ""
 
     st.write("""
-    This page helps generate your research methods. Follow the steps below to get started:
+    This page will help you generate appropriate research methods based on your research title and research questions.
+    Please provide the information below to receive your advised methods:
     """)
 
-    # Step 1: Description of the Study and Research Questions
-    st.header("Step 1: Description of the Study and Research Questions")
-    description = st.text_area("Enter the description of your study and the research questions", height=200)
+    # Research Title
+    st.header("Research Title")
+    research_title = st.text_input("Enter the title of your research", value=st.session_state.research_title)
 
-    # Step 2: Select Your Research Methods
-    st.header("Step 2: Select Your Research Methods")
-    methods = load_methods()
-    selected_methods = st.multiselect("Choose the methods you plan to use", methods)
+    # Research Questions
+    st.header("Research Questions")
+    research_description = st.text_area("Enter the research questions or a description of the study", height=200, value=st.session_state.research_description)
 
-    # Option to add a new method
-    st.subheader("Add a new method if it's not listed")
-    new_method = st.text_input("New Method")
-    if st.button("Add Method"):
-        if new_method and new_method not in methods:
-            save_new_method(new_method)
-            methods.append(new_method)
-            st.success(f"Method '{new_method}' added. Please re-select your methods.")
-        else:
-            st.error("Please enter a valid new method that is not already listed.")
+    # Save the title and description to session state when the inputs change
+    st.session_state.research_title = research_title
+    st.session_state.research_description = research_description
 
-    # Step 3: Specify Participant Details
-    st.header("Step 3: Specify Participant Details")
-    uses_participants = st.radio("Does the research use participants?", ("Yes", "No")) == "Yes"
-    participants_over_18 = None
-    if uses_participants:
-        participants_over_18 = st.radio("Are participants over 18?", ("Yes", "No")) == "Yes"
-
-    # Step 4: Generate Study Design
-    st.header("Step 4: Generate Study Design")
-    if st.button("Generate Study Design"):
-        if not description or not selected_methods:
-            st.error("Please enter a study description and select at least one method.")
+    # Generate Advised Research Methods
+    if st.button("Generate Advised Research Methods"):
+        # Validation for required inputs
+        if not research_title:
+            st.error("Please enter the research title.")
+        elif not research_description:
+            st.error("Please enter the research questions or a description of the study.")
         else:
             openapi_key = get_openai_api_key()
             try:
-                with st.spinner('Generating study design...'):
-                    participant_clause = "uses participants" if uses_participants else "does not use participants"
-                    age_clause = "over 18" if participants_over_18 else "under 18"
-                    research_methods = ", ".join(selected_methods)
-
+                with st.spinner('Generating research methods...'):
                     # Create a ChatOpenAI model
                     model = ChatOpenAI(model="gpt-4", openai_api_key=openapi_key)
 
-                    # Create chains
+                    # Create chain for generating research methods
                     chain1 = prompt1 | model | StrOutputParser()
-                    chain2 = prompt2 | model | StrOutputParser()
 
-                    # Get risk assessment
-                    risk_response = chain1.invoke({"description": description, "participant_clause": participant_clause})
-                    risk = risk_response.strip()
-
-                    # Generate study design
-                    study_design_response = chain2.invoke({
-                        "description": description,
-                        "participant_clause": participant_clause,
-                        "age_clause": age_clause,
-                        "research_methods": research_methods
+                    # Get advised research methods
+                    methods_response = chain1.invoke({
+                        "title": research_title,
+                        "description": research_description
                     })
-                    study_design = study_design_response.strip()
+                    advised_methods = methods_response.strip()
 
-                    st.success('Study design generated successfully!')
-                    st.subheader("Risk Assessment")
-                    st.write(risk)
-                    st.subheader("Study Design")
-                    st.write(study_design)
+                    # Store the advised methods in session state
+                    st.session_state.advised_methods = advised_methods
+
+                    st.success('Advised research methods generated successfully!')
+                    st.subheader("Advised Research Methods")
+                    st.write(advised_methods)
 
             except Exception as e:
-                st.error(f"Error generating study design: {e}")
+                st.error(f"Error generating advised research methods: {e}")
+
+    # Display previously generated methods if they exist
+    if st.session_state.advised_methods:
+        st.subheader("Previously Generated Advised Research Methods")
+        st.write(st.session_state.advised_methods)
