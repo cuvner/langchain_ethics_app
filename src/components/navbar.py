@@ -1,10 +1,12 @@
 import streamlit as st
 from streamlit_navigation_bar import st_navbar
 from src.services.ethical_considerations import create_detailed_dataframe
+from src.components.download_results_page import download_results_page  # Adjust this path
+
 
 def display_navbar():
     # Define the pages and styles for the navigation bar
-    pages = ["Home", "Research Methods", "Ethics", "Download Submissions"]
+    pages = ["Home", "Research Methods", "Ethics", "Download Results"]
     styles = {
         "nav": {
             "background-color": "rgb(123, 209, 146)",
@@ -30,17 +32,8 @@ def display_navbar():
     page = st_navbar(pages, styles=styles)
 
     # Handle the "Download Submissions" page
-    if page == "Download Submissions":
-        if 'submissions' in st.session_state and st.session_state['submissions']:
-            df = create_detailed_dataframe(st.session_state['submissions'])
-            csv = df.to_csv(index=False)
-            st.download_button(
-                label="Download submissions as CSV",
-                data=csv,
-                file_name='submissions.csv',
-                mime='text/csv',
-            )
-        else:
-            st.write("No submissions available to download.")
+    if page == "Download Results":
+        download_results_page()  # Call the download results page function
+
 
     return page
