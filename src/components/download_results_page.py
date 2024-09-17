@@ -1,7 +1,7 @@
 import streamlit as st
 import pandas as pd
-from fpdf import FPDF
-import io
+# from fpdf import FPDF
+# import io
 
 # def create_detailed_dataframe(submissions):
 #     # Convert the submissions into a pandas DataFrame for easy handling

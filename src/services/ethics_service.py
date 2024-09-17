@@ -23,7 +23,7 @@ def ethics_application_function(title, uses_participants, participants_over_18, 
     
     try:
         # Create a ChatOpenAI model
-        model = ChatOpenAI(model="gpt-4", openai_api_key=openapi_key)
+        model = ChatOpenAI(model="gpt-4o", openai_api_key=openapi_key)
 
         # Create chains
         chain1 = prompt1 | model | StrOutputParser()

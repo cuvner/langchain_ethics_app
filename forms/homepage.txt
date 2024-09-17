@@ -1,8 +1,8 @@
-This AI tool can be used to search the internet for useful advice on choosing appropriate research methods and gauging the ethical implications of these. It has two sections:/n
-1.	Generate appropriate research methods/n
-2.	Explore ethics issues and solutions/n
+This AI tool can be used to search the internet for useful advice on choosing appropriate research methods and gauging the ethical implications of these. It has two sections:
+1.	Generate appropriate research methods
+2.	Explore ethics issues and solutions
 1. The first can be used to check that you have explored all the possible relevant research methods appropriate for your project title and research questions. It will supplement the research methods that you mentioned in your research proposals and might suggest additional or alternative ways to conduct the data collection and analysis. 
-If the tool suggests methods that you have not considered, it is worth spending some time to find out more about them to see if you want to include them in your study or not./n
-2. The second can be used to explore the ethical issues raised on the basis of your research title and the research methods that you intend to employ. Each different research method will have different aspects of ethics to consider and different ways to mitigate against any danger of causing harm or embarrassment to your participants./n 
-You can use the results of your searches to complete the ethics implications form. Running the search several times may provide a richer result than just the once, so it is worth doing. Use the resulting advice with discretion. Remember, it is only a computer program, so your own judgement and choice is paramount!/n
+If the tool suggests methods that you have not considered, it is worth spending some time to find out more about them to see if you want to include them in your study or not.
+2. The second can be used to explore the ethical issues raised on the basis of your research title and the research methods that you intend to employ. Each different research method will have different aspects of ethics to consider and different ways to mitigate against any danger of causing harm or embarrassment to your participants. 
+You can use the results of your searches to complete the ethics implications form. Running the search several times may provide a richer result than just the once, so it is worth doing. Use the resulting advice with discretion. Remember, it is only a computer program, so your own judgement and choice is paramount!
 
