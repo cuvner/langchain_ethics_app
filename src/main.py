@@ -11,11 +11,11 @@ import os
 # Function to read the content of homepage.txt
 def load_homepage_text():
     try:
-        with open('forms/homepage.txt', 'r') as file:
+        with open('/langchain_ethics_app/forms/homepage.txt', 'r') as file:
             content = file.read()
         return content
     except FileNotFoundError:
-        return "Welcome to the Research Study Design Tool. The homepage content file could not be found."
+        return "This AI tool can be used to search the internet for useful advice on choosing appropriate research methods and gauging the ethical implications of these"
 
 def run_app():
     # Get the API key from the config file
@@ -124,7 +124,7 @@ def run_app():
 
         st.markdown('</div>', unsafe_allow_html=True)
 
-    elif page == "Research methods":
+    elif page == "Research Methods":
         design_methods_page()
 
     # Add a spacer at the bottom for the fixed bar

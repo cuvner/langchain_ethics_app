@@ -18,10 +18,10 @@ def save_new_method(method, file_path='src/methods.txt'):
         file.write(f"\n{method}")
 
 def design_methods_page():
-    st.title('Research Study Design')
+    st.title('Generate appropriate research methods')
 
     st.write("""
-    This page helps you design your research methods. Follow the steps below to get started:
+    This page helps generate your research methods. Follow the steps below to get started:
     """)
 
     # Step 1: Description of the Study and Research Questions
